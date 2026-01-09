@@ -1,0 +1,27 @@
+name: build-apk
+description: "构建Flutter APK"
+trigger:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: flutter:3.24.0
+    steps:
+      - name: 下载代码
+        uses: actions/checkout@v3
+
+      - name: 安装依赖
+        run: flutter pub get
+
+      - name: 构建APK
+        run: flutter build apk --release
+
+      - name: 上传APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
