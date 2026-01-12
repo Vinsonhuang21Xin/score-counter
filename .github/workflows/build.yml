@@ -24,7 +24,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0'
+          flutter-version: '3.13.9'
           channel: 'stable'
           cache: true
 
@@ -37,6 +37,58 @@ jobs:
           echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
           echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
           echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+
+      - name: Configure Maven mirrors for China
+        run: |
+          cd android
+          # 备份原配置
+          cp settings.gradle.kts settings.gradle.kts.backup
+
+          # 创建使用国内镜像的新配置
+          cat > settings.gradle.kts << 'EOF'
+          pluginManagement {
+              repositories {
+                  // 使用阿里云镜像（GitHub Actions可访问）
+                  maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
+                  maven { url = uri("https://maven.aliyun.com/repository/google") }
+                  maven { url = uri("https://maven.aliyun.com/repository/public") }
+                  maven { url = uri("https://maven.aliyun.com/repository/central") }
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+
+              val flutterSdkPath = run {
+                  val properties = java.util.Properties()
+                  file("local.properties").inputStream().use { properties.load(it) }
+                  val flutterSdkPath = properties.getProperty("flutter.sdk")
+                  require(flutterSdkPath != null) { "flutter.sdk not set in local.properties" }
+                  flutterSdkPath
+              }
+
+              includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+          }
+
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+              repositories {
+                  // 使用阿里云镜像
+                  maven { url = uri("https://maven.aliyun.com/repository/google") }
+                  maven { url = uri("https://maven.aliyun.com/repository/public") }
+                  maven { url = uri("https://maven.aliyun.com/repository/central") }
+                  google()
+                  mavenCentral()
+              }
+          }
+
+          plugins {
+              id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+              id("com.android.application") version "8.2.0" apply false
+              id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+          }
+
+          include(":app")
+          EOF
 
       - name: Install dependencies
         run: flutter pub get
