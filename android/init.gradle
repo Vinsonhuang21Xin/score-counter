@@ -1,0 +1,25 @@
+// Gradle镜像配置
+// 这个文件在settings.gradle之前执行，用于配置仓库镜像
+
+gradle.allprojects {
+    repositories {
+        // 国内镜像
+        maven { url = 'https://maven.aliyun.com/repository/google' }
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        maven { url = 'https://mirrors.cloud.tencent.com/repository/maven/' }
+        maven { url = 'https://mirrors.huaweicloud.com/repository/maven/' }
+        // 官方源
+        google()
+        mavenCentral()
+    }
+    buildscript {
+        repositories {
+            maven { url = 'https://maven.aliyun.com/repository/google' }
+            maven { url = 'https://maven.aliyun.com/repository/public' }
+            maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
+            google()
+            mavenCentral()
+        }
+    }
+}

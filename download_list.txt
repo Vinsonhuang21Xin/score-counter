@@ -1,0 +1,88 @@
+========================================
+   手动下载文件清单
+========================================
+
+说明：按优先级尝试下载，优先使用官方源
+
+------------------------------------------
+[1] Gradle 8.8（构建工具，约120MB）
+------------------------------------------
+
+优先级1 - 官方源（最可靠）：
+https://services.gradle.org/distributions/gradle-8.8-bin.zip
+
+优先级2 - 腾讯云镜像：
+https://mirrors.cloud.tencent.com/gradle/gradle-8.8-bin.zip
+
+优先级3 - 阿里云镜像：
+https://mirrors.aliyun.com/dist/gradle/gradle-8.8-bin.zip
+
+优先级4 - 华为云镜像：
+https://mirrors.huaweicloud.com/gradle/gradle-8.8-bin.zip
+
+下载后：解压到临时位置（如桌面）
+
+------------------------------------------
+[2] Android Gradle Plugin 8.2.0 - POM文件
+------------------------------------------
+
+优先级1 - Google Maven（最可靠）：
+https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.2.0/gradle-8.2.0.pom
+
+优先级2 - Maven Central：
+https://repo1.maven.org/maven2/com/android/tools/build/gradle/8.2.0/gradle-8.2.0.pom
+
+下载后：保存为 gradle-8.2.0.pom
+
+------------------------------------------
+[3] Android Gradle Plugin 8.2.0 - JAR文件
+------------------------------------------
+
+优先级1 - Google Maven（最可靠）：
+https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.2.0/gradle-8.2.0.jar
+
+优先级2 - Maven Central：
+https://repo1.maven.org/maven2/com/android/tools/build/gradle/8.2.0/gradle-8.2.0.jar
+
+下载后：保存为 gradle-8.2.0.jar
+
+------------------------------------------
+[4] Kotlin Gradle Plugin 1.9.0 - POM文件
+------------------------------------------
+
+优先级1 - Maven Central：
+https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/1.9.0/kotlin-gradle-plugin-1.9.0.pom
+
+下载后：保存为 kotlin-gradle-plugin-1.9.0.pom
+
+------------------------------------------
+[5] Kotlin Gradle Plugin 1.9.0 - JAR文件
+------------------------------------------
+
+优先级1 - Maven Central：
+https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-gradle-plugin/1.9.0/kotlin-gradle-plugin-1.9.0.jar
+
+下载后：保存为 kotlin-gradle-plugin-1.9.0.jar
+
+========================================
+   下载完成后的安装步骤
+========================================
+
+步骤1：安装Gradle 8.8
+运行脚本：install_all_manual.bat
+或手动复制到：
+C:\Users\Vinson\.gradle\wrapper\dists\gradle-8.8-bin\
+
+步骤2：安装AGP 8.2.0
+复制gradle-8.2.0.pom和gradle-8.2.0.jar到：
+C:\Users\Vinson\.gradle\caches\modules-2\files-2.1\com.android.tools.build\gradle\8.2.0\
+
+步骤3：安装Kotlin 1.9.0
+复制kotlin-gradle-plugin-1.9.0.pom和kotlin-gradle-plugin-1.9.0.jar到：
+C:\Users\Vinson\.gradle\caches\modules-2\files-2.1\org.jetbrains.kotlin.kotlin-gradle-plugin\1.9.0\
+
+步骤4：构建APK
+cd "D:\Claude Code\002_ScoreCounterApp\001_project_files\score_counter"
+flutter build apk --release
+
+========================================

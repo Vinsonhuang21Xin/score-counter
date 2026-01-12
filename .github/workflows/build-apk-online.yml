@@ -1,0 +1,72 @@
+name: Build APK
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 配置国内Maven镜像加速
+      - name: Setup Maven with Aliyun mirror
+        uses: whelk-io/maven-cli-setup@v1
+        with:
+          maven-version: 3.9.5
+          maven-config: |
+            <settings>
+              <mirrors>
+                <mirror>
+                  <id>aliyun</id>
+                  <name>Aliyun Maven</name>
+                  <url>https://maven.aliyun.com/repository/public</url>
+                  <mirrorOf>central</mirrorOf>
+                </mirror>
+                <mirror>
+                  <id>aliyun-google</id>
+                  <name>Aliyun Google</name>
+                  <url>https://maven.aliyun.com/repository/google</url>
+                  <mirrorOf>google</mirrorOf>
+                </mirror>
+              </mirrors>
+              <profiles>
+                <profile>
+                  <id>aliyun</id>
+                  <repositories>
+                    <repository>
+                      <id>aliyun</id>
+                      <url>https://maven.aliyun.com/repository/public</url>
+                    </repository>
+                    <repository>
+                      <id>aliyun-google</id>
+                      <url>https://maven.aliyun.com/repository/google</url>
+                    </repository>
+                  </repositories>
+                  <pluginRepositories>
+                    <pluginRepository>
+                      <id>aliyun-plugin</id>
+                      <url>https://maven.aliyun.com/repository/gradle-plugin</url>
+                    </pluginRepository>
+                  </pluginRepositories>
+                </profile>
+              </profiles>
+              <activeProfiles>
+                <activeProfile>aliyun</activeProfile>
+              </activeProfiles>
+            </settings>
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.24.0
+
+      - run: flutter pub get
+
+      - run: flutter build apk --release
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/app-release.apk
