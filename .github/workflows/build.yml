@@ -32,11 +32,15 @@ jobs:
         run: |
           cd android
           # 使用官方Gradle源（GitHub Actions可访问）
-          echo "distributionUrl=https://services.gradle.org/distributions/gradle-8.8-bin.zip" > gradle/wrapper/gradle-wrapper.properties
-          echo "distributionBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
-          echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
-          echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
-          echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          distributionUrl=https://services.gradle.org/distributions/gradle-8.8-bin.zip
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          EOF
+          # 验证修改
+          cat gradle/wrapper/gradle-wrapper.properties
 
       - name: Configure Maven mirrors for China
         run: |
